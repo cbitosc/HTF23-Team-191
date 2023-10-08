@@ -1,0 +1,129 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<style>
+    /* Stylish light green background for the entire page */
+    body {
+        background-color: #c2e5c9;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Center the form on the page */
+    #activelist {
+        width: 80%;
+        background-color: #333; /* Light black (gray) background color for the form */
+        color: #fff; /* White text color */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+    }
+
+    /* Stylish form styles */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-bottom: 2px solid #007bff; /* Blue underline for input fields */
+        background-color: transparent; /* Transparent background */
+        color: #fff; /* White text color */
+        font-size: 16px;
+        transition: border-bottom-color 0.3s ease-in-out;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="password"]:focus {
+        border-bottom-color: #0056b3; /* Darker blue on focus */
+        outline: none;
+    }
+
+    .btn {
+        display: inline-block;
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<!-- Your existing content goes here -->
+<div id="activelist">
+    <div id="productinfo">
+        <h2 class="title">{{ list.title }}</h2>
+        {% comment %} <a class="cat">{{ list.category }}</a> {% endcomment %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="message">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        
+        {% if list.image_url %}
+        <img src="{{ list.image_url }}" class="list_img">
+        {% else %}
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1024px-No_image_3x4.svg.png"
+            alt="No image Provided" class="list_img">
+        {% endif %}
+        
+        <p class="desc">{{ list.desc }}</p>
+        <div class="start_bid"><a class="c_price">Present Bid:</a> {{ present_bid }} $ </div>
+        <div class="start_bid"><a class="c_price">Listed By:</a> {{ list.user }}</div>
+       
+        <form method="get" action="{% url 'bid' %}">
+            <input name="bid_amnt" placeholder="Bid Amount" type="number">
+            <br>
+            <br>
+            <button class="btn btn-outline-primary" type="submit" name="list_d" value={{ list.id }}>Bid Item</button>
+        </form>
+        <br>
+        <br>
+        <div class="bid_amnt">
+            <form method="get" action="{% url 'addwatchlist' %}">
+                <button class="btn btn-outline-primary" type="submit" value={{ list.id }} name="listid">Add to
+                    Watchlist</button>
+            </form>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div id="commentsection">
+        <h3>Comments</h3>
+        <div id="commentbox">
+            <ul>
+                {% for comment in comments %}
+                <li><a class="comment"><a>{{ comment.user }} : {{ comment.comment }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <form method="get" action="{% url 'allcomments' %}">
+            <input required type="text" placeholder="Add Comment" name="comment">
+            <button class="btn btn-outline-primary" type="submit" value={{ list.id }} name="listid"> Comment </button>
+        </form>
+        <div class="closebid">
+            {% if list.user == user.username %}
+            <form method="get" action="{% url 'win_ner' %}">
+                <button class="btn btn-outline-primary" type="submit" value={{ list.id }} name="listid">Close
+                    Bid</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

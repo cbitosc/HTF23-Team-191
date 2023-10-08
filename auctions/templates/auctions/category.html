@@ -1,0 +1,62 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<style>
+    /* Stylish light green background for the entire page */
+    body {
+        background-color: #shararht;
+        margin: 0;
+        padding: 0;
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .page-header {
+        background-color: #007bff; /* Blue header background color */
+        color: white; /* White text color */
+        text-align: center;
+        padding: 20px;
+        font-size: 2vw;
+    }
+
+    #activelist {
+        display: flex;
+        flex-direction: column; /* Display buttons one below the other */
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .category-card {
+        width: 60%; /* Set the width to 60% */
+        max-width: 400px; /* Limit the maximum width for larger screens */
+        background-color: #333; /* Dark gray background color */
+        color: white; /* White text color */
+        border-radius: 10px;
+        padding: 20px;
+        margin: 10px auto; /* Center-align the buttons horizontally */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+    .category-card:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    .category-link {
+        text-decoration: none;
+        color: white; /* White text color */
+        font-size: 1.5vw;
+    }
+</style>
+
+<div class="page-header">
+    All Categories
+</div>
+<div id="activelist">
+    {% for list in cat_list %}
+    <div class="category-card">
+        <a class="category-link" href={% url 'cat' list.category %}>{{ list.category }}</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
